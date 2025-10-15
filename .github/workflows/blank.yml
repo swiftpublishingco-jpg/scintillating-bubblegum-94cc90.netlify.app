@@ -1,0 +1,39 @@
+from zipfile import ZipFile
+
+# Updated index.html using Decap CMS instead of Netlify CMS
+index_html_decap = """<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Swift Publishing Co | Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <!-- Load Decap CMS (replaces Netlify CMS) -->
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  </body>
+</html>
+"""
+
+# Reuse the same config.yml as before
+config_yml_path = "/mnt/data/admin/config.yml"
+with open(config_yml_path, "r") as f:
+    existing_config = f.read()
+
+# Create new Decap admin folder and zip it
+os.makedirs("/mnt/data/admin_decap", exist_ok=True)
+
+with open("/mnt/data/admin_decap/index.html", "w") as f:
+    f.write(index_html_decap)
+
+with open("/mnt/data/admin_decap/config.yml", "w") as f:
+    f.write(existing_config)
+
+zip_path_decap = "/mnt/data/admin_decap.zip"
+with ZipFile(zip_path_decap, "w") as zipf:
+    zipf.write("/mnt/data/admin_decap/index.html", arcname="admin/index.html")
+    zipf.write("/mnt/data/admin_decap/config.yml", arcname="admin/config.yml")
+
+zip_path_decap
+Result
+'/mnt/data/admin_decap.zip'
